@@ -32,6 +32,21 @@
 
     <section id="vehicleList" class="vehicle-list" aria-label="Lista de veículos"></section>
     <p id="emptyMessage" class="empty-message" hidden>Nenhum veículo cadastrado.</p>
+    <section id="vehicleDetails" class="details-panel" hidden>
+  <h2 id="detailsTitle">Detalhes do veículo</h2>
+
+  <dl class="details-list">
+    <div><dt>Nome</dt><dd id="detailName"></dd></div>
+    <div><dt>Placa</dt><dd id="detailPlate"></dd></div>
+    <div><dt>Ano</dt><dd id="detailYear"></dd></div>
+    <div><dt>Modelo</dt><dd id="detailModel"></dd></div>
+  </dl>
+
+  <div id="adminActions" class="details-actions" hidden>
+    <button id="deleteButton" class="danger-button" type="button">Excluir</button>
+    <button id="editButton" class="primary-button" type="button">Editar</button>
+  </div>
+</section>
   </main>
 
   <nav class="bottom-nav" id="bottomNav" aria-label="Navegação principal"></nav>
@@ -72,30 +87,6 @@
         <button class="primary-button" type="submit">Salvar veículo</button>
       </div>
     </form>
-  </dialog>
-
-  <dialog id="detailsDialog" class="dialog">
-    <section class="dialog-card">
-      <div class="dialog-heading">
-        <div>
-          <p class="eyebrow">DETALHES DO VEÍCULO</p>
-          <h2 id="detailsTitle">Veículo</h2>
-        </div>
-        <button id="closeDetailsButton" class="icon-button" type="button" aria-label="Fechar">×</button>
-      </div>
-
-      <dl class="details-list">
-        <div><dt>Nome</dt><dd id="detailName"></dd></div>
-        <div><dt>Placa</dt><dd id="detailPlate"></dd></div>
-        <div><dt>Ano</dt><dd id="detailYear"></dd></div>
-        <div><dt>Modelo</dt><dd id="detailModel"></dd></div>
-      </dl>
-
-      <div id="adminActions" class="dialog-actions" hidden>
-        <button id="deleteButton" class="danger-button" type="button">Excluir</button>
-        <button id="editButton" class="primary-button" type="button">Editar</button>
-      </div>
-    </section>
   </dialog>
 </body>
 </html>
