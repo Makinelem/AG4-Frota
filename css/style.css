@@ -1,0 +1,101 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.login-page {
+  min-height: 100vh;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+  color: #172033;
+  background: linear-gradient(140deg, #102b4e, #1a6c71);
+}
+
+.login-card {
+  width: min(100%, 420px);
+  padding: 34px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 18px 50px #06162955;
+}
+
+.brand-mark {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: #147d76;
+  color: #fff;
+  font-weight: 800;
+  font-size: 19px;
+}
+
+h1 {
+  margin: 18px 0 4px;
+  font-size: 28px;
+}
+
+.subtitle {
+  margin: 0 0 26px;
+  color: #687386;
+}
+
+label {
+  display: block;
+  margin: 16px 0 7px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #d6dce5;
+  border-radius: 10px;
+  font: inherit;
+}
+
+input:focus {
+  outline: 3px solid #147d762c;
+  border-color: #147d76;
+}
+
+button {
+  width: 100%;
+  margin-top: 18px;
+  padding: 14px;
+  border: 0;
+  border-radius: 10px;
+  background: #147d76;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #10665f;
+}
+
+.error-message {
+  min-height: 18px;
+  margin: 10px 0 0;
+  color: #b42318;
+  font-size: 14px;
+}
+
+.demo-accounts {
+  margin-top: 22px;
+  color: #687386;
+  font-size: 13px;
+}
+
+.demo-accounts p {
+  margin: 8px 0;
+}
