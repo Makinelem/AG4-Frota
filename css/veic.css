@@ -1,0 +1,271 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding-bottom: 88px;
+  color: #172033;
+  background: #f4f7fa;
+  font-family: Arial, sans-serif;
+}
+
+.topbar {
+  min-height: 68px;
+  padding: 12px clamp(16px, 5vw, 56px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #102b4e;
+  color: #fff;
+}
+
+.app-brand {
+  color: #fff;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.app-brand strong {
+  color: #62d4bd;
+}
+
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.logout-button {
+  padding: 8px 12px;
+  border: 1px solid #ffffff66;
+  border-radius: 8px;
+  color: #fff;
+  background: transparent;
+  cursor: pointer;
+}
+
+.content {
+  width: min(100% - 32px, 1100px);
+  margin: 34px auto;
+}
+
+.page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.eyebrow {
+  margin: 0 0 7px;
+  color: #147d76;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(28px, 5vw, 38px);
+}
+
+.subtitle {
+  color: #687386;
+}
+
+.primary-button,
+.secondary-button,
+.danger-button {
+  padding: 11px 15px;
+  border: 0;
+  border-radius: 9px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary-button {
+  color: #fff;
+  background: #147d76;
+}
+
+.primary-button:hover {
+  background: #10665f;
+}
+
+.secondary-button {
+  color: #344054;
+  background: #eef1f5;
+}
+
+.danger-button {
+  color: #fff;
+  background: #b42318;
+}
+
+.vehicle-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.vehicle-item {
+  width: 100%;
+  padding: 17px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid #e3e8ef;
+  border-radius: 12px;
+  color: #172033;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vehicle-item:hover {
+  border-color: #147d76;
+  box-shadow: 0 5px 16px #14213d0c;
+}
+
+.vehicle-name {
+  font-weight: 700;
+}
+
+.vehicle-plate {
+  color: #526078;
+  font-size: 14px;
+}
+
+.empty-message,
+.feedback {
+  color: #687386;
+}
+
+.feedback {
+  min-height: 20px;
+  margin-top: 18px;
+}
+
+.dialog {
+  width: min(100% - 28px, 500px);
+  max-height: 90vh;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+}
+
+.dialog::backdrop {
+  background: #10182899;
+  backdrop-filter: blur(2px);
+}
+
+.dialog-card {
+  padding: 24px;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.dialog-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.dialog-heading h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.icon-button {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 8px;
+  color: #344054;
+  background: #eef1f5;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+label {
+  display: block;
+  margin: 14px 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d6dce5;
+  border-radius: 9px;
+  font: inherit;
+}
+
+input:focus {
+  outline: 3px solid #147d762c;
+  border-color: #147d76;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.error-message {
+  min-height: 18px;
+  margin: 10px 0 0;
+  color: #b42318;
+  font-size: 14px;
+}
+
+.details-list {
+  margin: 0;
+}
+
+.details-list div {
+  padding: 12px 0;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.details-list dt {
+  color: #687386;
+  font-size: 13px;
+}
+
+.details-list dd {
+  margin: 5px 0 0;
+  font-weight: 700;
+}
+
+.bottom-nav {
+  position: fixed;
+  z-index: 10;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+  border-top: 1px solid #dfe5ec;
+  background: #fff;
+  scrollbar-width: thin;
+  -webkit
