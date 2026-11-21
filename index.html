@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Frota AG4 | Login</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/script.js" defer></script>
+</head>
+<body class="login-page">
+  <main class="login-card">
+    <div class="brand-mark">AG4</div>
+    <h1>Frota AG4</h1>
+    <p class="subtitle">Gestão de frota</p>
+
+    <form id="loginForm">
+      <label for="username">Usuário</label>
+      <input id="username" name="username" autocomplete="username"
+             placeholder="Digite seu usuário" required>
+
+      <label for="password">Senha</label>
+      <input id="password" name="password" type="password"
+             autocomplete="current-password" placeholder="Digite sua senha" required>
+
+      <p id="loginError" class="error-message" role="alert"></p>
+      <button type="submit">Entrar</button>
+    </form>
+
+    <details class="demo-accounts">
+      <summary>Acessos para demonstração</summary>
+      <p>Usuário: <b>usuario</b> / senha: <b>1234</b></p>
+      <p>Gerente: <b>gerente</b> / senha: <b>1234</b></p>
+      <p>Administrador: <b>admin</b> / senha: <b>1234</b></p>
+    </details>
+  </main>
+</body>
+</html>
