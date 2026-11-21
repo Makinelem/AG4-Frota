@@ -269,3 +269,50 @@ input:focus {
   background: #fff;
   scrollbar-width: thin;
   -webkit
+
+
+  .bottom-nav {
+  position: fixed;
+  z-index: 5;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 10px max(9px, env(safe-area-inset-bottom));
+  border-top: 1px solid #e0e6ed;
+  background: #fff;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-link {
+  flex: 0 0 auto;
+  min-width: 80px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: #445066;
+  text-align: center;
+  text-decoration: none;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #fff;
+  background: #147d76;
+}
+.nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.nav-link img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
