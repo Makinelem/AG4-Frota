@@ -127,3 +127,58 @@ h1 {
     justify-content: center;
   }
 }
+
+
+
+body {
+  padding-bottom: 90px;
+}
+
+.bottom-nav {
+  position: fixed;
+  z-index: 10;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+  border-top: 1px solid #dfe5ec;
+  background: #fff;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-link {
+  flex: 0 0 82px;
+  display: flex;
+  min-height: 62px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 10px;
+  color: #445066;
+  text-decoration: none;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.nav-link img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #fff;
+  background: #147d76;
+}
+
+@media (min-width: 800px) {
+  .bottom-nav {
+    justify-content: flex-start;
+  }
+}
