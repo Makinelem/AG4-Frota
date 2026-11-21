@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Veículos | Frota AG4</title>
+  <link rel="stylesheet" href="css/veic.css">
+  <script src="js/veic.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="app-brand" href="app.html">Frota <strong>AG4</strong></a>
+    <div class="user-area">
+      <span id="userInfo"></span>
+      <button id="logoutButton" class="logout-button" type="button">Sair</button>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">GESTÃO DA FROTA</p>
+        <h1>Veículos</h1>
+        <p class="subtitle">Cadastre e consulte os veículos da frota.</p>
+      </div>
+      <button id="openFormButton" class="primary-button" type="button">
+        + Cadastrar veículo
+      </button>
+    </div>
+
+    <p id="feedback" class="feedback" role="status"></p>
+
+    <section id="vehicleList" class="vehicle-list" aria-label="Lista de veículos"></section>
+    <p id="emptyMessage" class="empty-message" hidden>Nenhum veículo cadastrado.</p>
+  </main>
+
+  <nav class="bottom-nav" id="bottomNav" aria-label="Navegação principal"></nav>
+
+  <dialog id="vehicleDialog" class="dialog">
+    <form id="vehicleForm" class="dialog-card">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">FROTA AG4</p>
+          <h2 id="formTitle">Cadastrar veículo</h2>
+        </div>
+        <button id="closeFormButton" class="icon-button" type="button" aria-label="Fechar">×</button>
+      </div>
+
+      <input id="vehicleId" type="hidden">
+
+      <label for="name">Nome</label>
+      <input id="name" name="name" maxlength="80" required>
+
+      <label for="plate">Placa</label>
+      <input id="plate" name="plate" maxlength="8" placeholder="ABC1D23"
+             autocomplete="off" required>
+
+      <div class="form-row">
+        <div>
+          <label for="year">Ano</label>
+          <input id="year" name="year" type="number" min="1900" max="2100" required>
+        </div>
+        <div>
+          <label for="model">Modelo</label>
+          <input id="model" name="model" maxlength="80" required>
+        </div>
+      </div>
+
+      <p id="formError" class="error-message" role="alert"></p>
+      <div class="dialog-actions">
+        <button id="cancelFormButton" class="secondary-button" type="button">Cancelar</button>
+        <button class="primary-button" type="submit">Salvar veículo</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="detailsDialog" class="dialog">
+    <section class="dialog-card">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">DETALHES DO VEÍCULO</p>
+          <h2 id="detailsTitle">Veículo</h2>
+        </div>
+        <button id="closeDetailsButton" class="icon-button" type="button" aria-label="Fechar">×</button>
+      </div>
+
+      <dl class="details-list">
+        <div><dt>Nome</dt><dd id="detailName"></dd></div>
+        <div><dt>Placa</dt><dd id="detailPlate"></dd></div>
+        <div><dt>Ano</dt><dd id="detailYear"></dd></div>
+        <div><dt>Modelo</dt><dd id="detailModel"></dd></div>
+      </dl>
+
+      <div id="adminActions" class="dialog-actions" hidden>
+        <button id="deleteButton" class="danger-button" type="button">Excluir</button>
+        <button id="editButton" class="primary-button" type="button">Editar</button>
+      </div>
+    </section>
+  </dialog>
+</body>
+</html>
