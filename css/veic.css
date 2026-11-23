@@ -315,7 +315,7 @@ input:focus {
   object-fit: contain;
 }
 
-.topbar .app-logo {
+.topbar img.app-logo {
   display: block;
   width: auto;
   height: 30px;
