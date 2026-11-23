@@ -36,7 +36,7 @@ if (!sessionText) {
   const welcomeMessage = document.querySelector("#welcomeMessage");
   const accessNote = document.querySelector("#accessNote");
 
-  if (userInfo) userInfo.textContent = `${session.name} · ${session.role}`;
+  if (userInfo) userInfo.textContent = session.name;
   if (welcomeMessage) welcomeMessage.textContent = `Olá, ${session.name}!`;
   if (accessNote) accessNote.textContent = "As abas exibidas dependem do seu nível de acesso.";
 
