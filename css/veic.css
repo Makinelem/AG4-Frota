@@ -273,7 +273,7 @@ input:focus {
 
   .bottom-nav {
   position: fixed;
-  z-index: 5;
+  z-index: 10;
   right: 0;
   bottom: 0;
   left: 0;
@@ -291,6 +291,10 @@ input:focus {
   flex: 0 0 auto;
   min-width: 80px;
   padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
   border-radius: 8px;
   color: #445066;
   text-align: center;
@@ -299,28 +303,22 @@ input:focus {
   white-space: nowrap;
 }
 
-
-
-  .app-logo {
-  display: block;
-  width: auto;
-  height: 30px;
-  object-fit: contain;
-}
 .nav-link:hover,
 .nav-link.active {
   color: #fff;
   background: #147d76;
 }
-.nav-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-}
 
 .nav-link img {
   width: 24px;
   height: 24px;
+  object-fit: contain;
+}
+
+.topbar .app-logo {
+  display: block;
+  width: auto;
+  height: 30px;
+  max-width: 160px;
   object-fit: contain;
 }
