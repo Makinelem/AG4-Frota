@@ -3,6 +3,8 @@ const session = JSON.parse(localStorage.getItem("frotaAG4Session") || "null");
 if (!session) {
   window.location.href = "index.html";
 } else {
+  const userInfo = document.querySelector("#userInfo");
+  if (userInfo) userInfo.textContent = session.name;
   const tabs = [
     { label: "Início", href: "app.html", icon: "img/ini.svg", roles: ["usuario", "gerente", "administrador"] },
     { label: "Veículos", href: "veic.html", icon: "img/vei.svg", roles: ["usuario", "gerente", "administrador"] },
