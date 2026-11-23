@@ -299,6 +299,14 @@ input:focus {
   white-space: nowrap;
 }
 
+
+
+  .app-logo {
+  display: block;
+  width: auto;
+  height: 42px;
+  object-fit: contain;
+}
 .nav-link:hover,
 .nav-link.active {
   color: #fff;
