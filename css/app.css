@@ -171,7 +171,7 @@ body {
 .app-logo {
   display: block;
   width: auto;
-  height: 42px;
+  height: 30px;
   object-fit: contain;
 }
 .nav-link img {
