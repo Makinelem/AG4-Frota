@@ -9,7 +9,7 @@ if (!session) {
   const nav = document.querySelector("#bottomNav");
   const logoutButton = document.querySelector("#logoutButton");
 
-  if (userInfo) userInfo.textContent = session.name;
+  if (userInfo) userInfo.textContent = session.name || "";
 
   const tabs = [
     { label: "Início", href: "app.html", icon: "img/ini.svg", roles: ["usuario", "gerente", "administrador"] },
@@ -49,10 +49,10 @@ if (!session) {
   const vehicleList = document.querySelector("#vehicleList");
   const emptyMessage = document.querySelector("#emptyMessage");
   const formError = document.querySelector("#formError");
-  const vehicleStorageKey = "frotaAG4Vehicles";
+  const storageKey = "frotaAG4Vehicles";
 
   function getVehicles() {
-    return JSON.parse(localStorage.getItem(vehicleStorageKey) || "[]");
+    return JSON.parse(localStorage.getItem(storageKey) || "[]");
   }
 
   function renderVehicles() {
@@ -105,7 +105,7 @@ if (!session) {
     }
 
     vehicles.push(vehicle);
-    localStorage.setItem(vehicleStorageKey, JSON.stringify(vehicles));
+    localStorage.setItem(storageKey, JSON.stringify(vehicles));
 
     renderVehicles();
     closeDialog();
