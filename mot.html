@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Motoristas | Frota AG4</title>
+  <link rel="stylesheet" href="css/veic.css">
+  <link rel="stylesheet" href="css/mot.css">
+  <script src="js/mot.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="app-brand" href="app.html" aria-label="Frota AG4 - Início">
+      <img src="img/logo.png" alt="Frota AG4" class="app-logo">
+    </a>
+    <div class="user-area">
+      <span id="userInfo"></span>
+      <button id="logoutButton" class="logout-button" type="button">Sair</button>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">GESTÃO DA FROTA</p>
+        <h1>Motoristas</h1>
+        <p class="subtitle">Cadastre e consulte os motoristas da frota.</p>
+      </div>
+      <button id="openFormButton" class="primary-button" type="button">
+        + Cadastrar motorista
+      </button>
+    </div>
+
+    <p id="feedback" class="feedback" role="status"></p>
+    <section id="driverList" class="vehicle-list" aria-label="Lista de motoristas"></section>
+    <p id="emptyMessage" class="empty-message" hidden>Nenhum motorista cadastrado.</p>
+  </main>
+
+  <nav class="bottom-nav" id="bottomNav" aria-label="Navegação principal"></nav>
+
+  <dialog id="driverDialog" class="dialog">
+    <form id="driverForm" class="dialog-card">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">FROTA AG4</p>
+          <h2>Cadastrar motorista</h2>
+        </div>
+        <button id="closeFormButton" class="icon-button" type="button"
+                aria-label="Fechar">×</button>
+      </div>
+
+      <label for="name">Nome</label>
+      <input id="name" name="name" maxlength="80" required>
+
+      <label for="birthDate">Data de nascimento</label>
+      <input id="birthDate" name="birthDate" type="date" required>
+
+      <label for="phone">Telefone</label>
+      <input id="phone" name="phone" type="tel" maxlength="20"
+             placeholder="(00) 00000-0000" required>
+
+      <label for="licenseExpiry">Validade da CNH</label>
+      <input id="licenseExpiry" name="licenseExpiry" type="date" required>
+
+      <p id="formError" class="error-message" role="alert"></p>
+
+      <div class="dialog-actions">
+        <button id="cancelFormButton" class="secondary-button" type="button">
+          Cancelar
+        </button>
+        <button class="primary-button" type="submit">Salvar motorista</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
