@@ -34,16 +34,25 @@
 
     <section id="vehicleList" class="vehicle-list" aria-label="Lista de veículos"></section>
     <p id="emptyMessage" class="empty-message" hidden>Nenhum veículo cadastrado.</p>
+    <dialog id="vehicleDetailsDialog" class="dialog">
+  <div class="dialog-card">
+    <div class="dialog-heading">
+      <h2 id="detailsTitle">Detalhes do veículo</h2>
+      <button id="closeDetailsButton" class="icon-button"
+              type="button" aria-label="Fechar">×</button>
+    </div>
+
+    <dl class="details-list">
+      <div><dt>Nome</dt><dd id="detailName"></dd></div>
+      <div><dt>Placa</dt><dd id="detailPlate"></dd></div>
+      <div><dt>Modelo</dt><dd id="detailModel"></dd></div>
+      <div><dt>Ano</dt><dd id="detailYear"></dd></div>
+      <div><dt>Cor</dt><dd id="detailColor"></dd></div>
+    </dl>
+  </div>
+</dialog>
     <section id="vehicleDetails" class="details-panel" hidden>
-  <h2 id="detailsTitle">Detalhes do veículo</h2>
-
-  <dl class="details-list">
-    <div><dt>Nome</dt><dd id="detailName"></dd></div>
-    <div><dt>Placa</dt><dd id="detailPlate"></dd></div>
-    <div><dt>Ano</dt><dd id="detailYear"></dd></div>
-    <div><dt>Modelo</dt><dd id="detailModel"></dd></div>
-  </dl>
-
+  
   <div id="adminActions" class="details-actions" hidden>
     <button id="deleteButton" class="danger-button" type="button">Excluir</button>
     <button id="editButton" class="primary-button" type="button">Editar</button>
