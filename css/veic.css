@@ -268,26 +268,25 @@ input:focus {
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding: 6px 12px calc(6px + env(safe-area-inset-bottom)); /* padding: 8px 10px max(9px, env(safe-area-inset-bottom)); */
-  border-top: 1px solid #e0e6ed;
+  padding: 6px 12px calc(6px + env(safe-area-inset-bottom)); /* padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); */
+  border-top: 1px solid #dfe5ec;
   background: #fff;
   scrollbar-width: thin;
   -webkit-overflow-scrolling: touch;
 }
 
 .nav-link {
-  flex: 0 0 auto;
-  min-width: 80px;
-  padding: 8px 10px;
+  flex: 0 0 82px;
   display: flex;
+  min-height: 47px; /* era 62px; redução aproximada de 20% */
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 5px;
-  border-radius: 8px;
+  border-radius: 10px;
   color: #445066;
-  text-align: center;
   text-decoration: none;
-  font-size: 13px;
+  font-size: 12px;
   white-space: nowrap;
 }
 
