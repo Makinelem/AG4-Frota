@@ -19,3 +19,13 @@
   color: #9f1c13;
   background: #fde8e7;
 }
+
+.driver-birth {
+  color: #526078;
+  font-size: 14px;
+}
+
+.driver-item {
+  font: inherit;
+  text-align: left;
+}
