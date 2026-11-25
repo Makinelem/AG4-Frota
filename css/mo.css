@@ -1,0 +1,21 @@
+.driver-expiry {
+  margin-top: 4px;
+  color: #526078;
+  font-size: 14px;
+}
+
+.license-alert {
+  display: inline-block;
+  margin-top: 7px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  color: #7a2e00;
+  background: #fff0d6;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.license-alert.expired {
+  color: #9f1c13;
+  background: #fde8e7;
+}
