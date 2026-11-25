@@ -8,6 +8,17 @@ if (!session) {
   const userInfo = document.querySelector("#userInfo");
   const nav = document.querySelector("#bottomNav");
   const logoutButton = document.querySelector("#logoutButton");
+  const openFormButton = document.querySelector("#openFormButton");
+  const vehicleDialog = document.querySelector("#vehicleDialog");
+  const vehicleForm = document.querySelector("#vehicleForm");
+  const closeFormButton = document.querySelector("#closeFormButton");
+  const cancelFormButton = document.querySelector("#cancelFormButton");
+  const vehicleList = document.querySelector("#vehicleList");
+  const emptyMessage = document.querySelector("#emptyMessage");
+  const formError = document.querySelector("#formError");
+  const vehicleDetailsDialog = document.querySelector("#vehicleDetailsDialog");
+  const closeDetailsButton = document.querySelector("#closeDetailsButton");
+  const storageKey = "frotaAG4Vehicles";
 
   if (userInfo) userInfo.textContent = session.name || "";
 
@@ -36,21 +47,6 @@ if (!session) {
     `)
     .join("");
 
-  logoutButton.addEventListener("click", () => {
-    localStorage.removeItem("frotaAG4Session");
-    window.location.href = "index.html";
-  });
-
-  const openFormButton = document.querySelector("#openFormButton");
-  const vehicleDialog = document.querySelector("#vehicleDialog");
-  const vehicleForm = document.querySelector("#vehicleForm");
-  const closeFormButton = document.querySelector("#closeFormButton");
-  const cancelFormButton = document.querySelector("#cancelFormButton");
-  const vehicleList = document.querySelector("#vehicleList");
-  const emptyMessage = document.querySelector("#emptyMessage");
-  const formError = document.querySelector("#formError");
-  const storageKey = "frotaAG4Vehicles";
-
   function getVehicles() {
     return JSON.parse(localStorage.getItem(storageKey) || "[]");
   }
@@ -58,14 +54,13 @@ if (!session) {
   function renderVehicles() {
     const vehicles = getVehicles();
 
-    vehicleList.innerHTML = vehicles.map(vehicle => `
-      <article class="vehicle-item">
-        <div>
-          <div class="vehicle-name">${vehicle.name}</div>
-          <div class="vehicle-plate">${vehicle.plate} · ${vehicle.model}</div>
-          <div>${vehicle.year} · ${vehicle.color}</div>
-        </div>
-      </article>
+    vehicleList.innerHTML = vehicles.map((vehicle, index) => `
+      <button class="vehicle-item" type="button" data-index="${index}">
+        <span>
+          <span class="vehicle-name">${vehicle.name}</span><br>
+          <span class="vehicle-plate">${vehicle.plate}</span>
+        </span>
+      </button>
     `).join("");
 
     emptyMessage.hidden = vehicles.length > 0;
@@ -85,6 +80,31 @@ if (!session) {
 
   closeFormButton.addEventListener("click", closeDialog);
   cancelFormButton.addEventListener("click", closeDialog);
+
+  vehicleList.addEventListener("click", event => {
+    const button = event.target.closest(".vehicle-item");
+    if (!button) return;
+
+    const vehicle = getVehicles()[Number(button.dataset.index)];
+    if (!vehicle) return;
+
+    document.querySelector("#detailName").textContent = vehicle.name;
+    document.querySelector("#detailPlate").textContent = vehicle.plate;
+    document.querySelector("#detailModel").textContent = vehicle.model;
+    document.querySelector("#detailYear").textContent = vehicle.year;
+    document.querySelector("#detailColor").textContent = vehicle.color;
+
+    vehicleDetailsDialog.showModal();
+  });
+
+  closeDetailsButton.addEventListener("click", () => {
+    vehicleDetailsDialog.close();
+  });
+
+  logoutButton.addEventListener("click", () => {
+    localStorage.removeItem("frotaAG4Session");
+    window.location.href = "index.html";
+  });
 
   vehicleForm.addEventListener("submit", event => {
     event.preventDefault();
