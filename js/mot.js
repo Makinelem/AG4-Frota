@@ -68,38 +68,58 @@ if (!session) {
   }
 
   function renderDrivers() {
-    const drivers = getDrivers();
+  const drivers = getDrivers();
 
-    driverList.innerHTML = drivers.map(driver => {
-      const days = daysUntil(driver.licenseExpiry);
-      let alert = "";
+  driverList.innerHTML = drivers.map((driver, index) => {
+    const days = daysUntil(driver.licenseExpiry);
+    let alert = "";
 
-      if (days < 0) {
-        alert = `<span class="license-alert expired">CNH vencida</span>`;
-      } else if (days < 90) {
-        const message = days === 0
-          ? "CNH vence hoje"
-          : `CNH vence em ${days} dia${days === 1 ? "" : "s"}`;
+    if (days < 0) {
+      alert = `<span class="license-alert expired">CNH vencida</span>`;
+    } else if (days < 90) {
+      const message = days === 0
+        ? "CNH vence hoje"
+        : `CNH vence em ${days} dia${days === 1 ? "" : "s"}`;
 
-        alert = `<span class="license-alert">${message}</span>`;
-      }
+      alert = `<span class="license-alert">${message}</span>`;
+    }
 
-      return `
-        <article class="vehicle-item driver-item">
-          <div>
-            <div class="vehicle-name">${driver.name}</div>
-            <div class="vehicle-plate">${driver.phone}</div>
-            <div class="driver-expiry">
-              Validade da CNH: ${formatDate(driver.licenseExpiry)}
-            </div>
-            ${alert}
-          </div>
-        </article>
-      `;
-    }).join("");
+    return `
+      <button class="vehicle-item driver-item" type="button" data-index="${index}">
+        <span>
+          <span class="vehicle-name">${driver.name}</span><br>
+          <span class="driver-birth">${formatDate(driver.birthDate)}</span>
+          ${alert}
+        </span>
+      </button>
+    `;
+  }).join("");
 
-    emptyMessage.hidden = drivers.length > 0;
-  }
+  emptyMessage.hidden = drivers.length > 0;
+}
+
+  const driverDetailsDialog = document.querySelector("#driverDetailsDialog");
+const closeDetailsButton = document.querySelector("#closeDetailsButton");
+
+driverList.addEventListener("click", event => {
+  const button = event.target.closest(".driver-item");
+  if (!button) return;
+
+  const driver = getDrivers()[Number(button.dataset.index)];
+  if (!driver) return;
+
+  document.querySelector("#detailName").textContent = driver.name;
+  document.querySelector("#detailBirthDate").textContent = formatDate(driver.birthDate);
+  document.querySelector("#detailPhone").textContent = driver.phone;
+  document.querySelector("#detailLicenseExpiry").textContent =
+    formatDate(driver.licenseExpiry);
+
+  driverDetailsDialog.showModal();
+});
+
+closeDetailsButton.addEventListener("click", () => {
+  driverDetailsDialog.close();
+});
 
   function closeDialog() {
     driverDialog.close();
