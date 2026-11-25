@@ -74,6 +74,7 @@ h1 {
 }
 
 .subtitle {
+  margin-bottom: 8px;
   color: #687386;
 }
 
@@ -110,7 +111,7 @@ h1 {
 .vehicle-list {
   display: grid;
   gap: 10px;
-  margin-top: 7px; /* era 24px: reduz em cerca de 70% o espaço antes da lista */
+  margin-top: 8px; /* era 24px: reduz em cerca de 70% o espaço antes da lista */
 }
 
 .vehicle-item {
@@ -144,6 +145,8 @@ h1 {
 
 .empty-message,
 .feedback {
+  min-height: 0;
+  margin: 0;
   color: #687386;
 }
 
