@@ -34,6 +34,22 @@
     <p id="feedback" class="feedback" role="status"></p>
     <section id="driverList" class="vehicle-list" aria-label="Lista de motoristas"></section>
     <p id="emptyMessage" class="empty-message" hidden>Nenhum motorista cadastrado.</p>
+    <dialog id="driverDetailsDialog" class="dialog">
+  <div class="dialog-card">
+    <div class="dialog-heading">
+      <h2>Dados do motorista</h2>
+      <button id="closeDetailsButton" class="icon-button"
+              type="button" aria-label="Fechar">×</button>
+    </div>
+
+    <dl class="details-list">
+      <div><dt>Nome</dt><dd id="detailName"></dd></div>
+      <div><dt>Data de nascimento</dt><dd id="detailBirthDate"></dd></div>
+      <div><dt>Telefone</dt><dd id="detailPhone"></dd></div>
+      <div><dt>Validade da CNH</dt><dd id="detailLicenseExpiry"></dd></div>
+    </dl>
+  </div>
+</dialog>
   </main>
 
   <nav class="bottom-nav" id="bottomNav" aria-label="Navegação principal"></nav>
