@@ -1,4 +1,6 @@
-const session = JSON.parse(localStorage.getItem("frotaAG4Session") || "null");
+const session = JSON.parse(
+  localStorage.getItem("frotaAG4Session") || "null"
+);
 
 if (!session) {
   window.location.href = "index.html";
@@ -37,56 +39,72 @@ if (!session) {
     { label: "Usuários", href: "user.html", icon: "img/use.svg", roles: ["administrador"] }
   ];
 
-  const currentPage = location.pathname.split("/").pop();
+  const paginaAtual = location.pathname.split("/").pop();
 
-  nav.innerHTML = tabs
-    .filter(tab => tab.roles.includes(session.role))
-    .map(tab => `
-      <a class="nav-link ${tab.href === currentPage ? "active" : ""}" href="${tab.href}">
-        <img src="${tab.icon}" alt="">
-        <span>${tab.label}</span>
-      </a>
-    `)
-    .join("");
+  if (nav) {
+    nav.innerHTML = tabs
+      .filter(tab => tab.roles.includes(session.role))
+      .map(tab => `
+        <a class="nav-link ${tab.href === paginaAtual ? "active" : ""}" href="${tab.href}">
+          <img src="${tab.icon}" alt="">
+          <span>${tab.label}</span>
+        </a>
+      `)
+      .join("");
+  }
 
   function getList(key) {
     try {
-      return JSON.parse(localStorage.getItem(key) || "[]");
+      const data = JSON.parse(localStorage.getItem(key) || "[]");
+      return Array.isArray(data) ? data : [];
     } catch {
       return [];
     }
+  }
+
+  function saveList(key, items) {
+    localStorage.setItem(key, JSON.stringify(items));
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[character]);
   }
 
   function getName(item) {
     return item?.name || item?.nome || "";
   }
 
-  function fillSelect(select, items, placeholder, selectedId = "") {
+  function fillSelect(select, items, placeholder) {
     select.innerHTML = `<option value="">${placeholder}</option>`;
 
     items.forEach((item, index) => {
-      const id = item.id ?? index;
       const option = document.createElement("option");
-      option.value = String(id);
+      option.value = String(index);
       option.textContent = getName(item) || `Cadastro ${index + 1}`;
-      if (String(id) === String(selectedId)) option.selected = true;
       select.appendChild(option);
     });
   }
 
-  function getVehicleName(id) {
-    const vehicles = getList(vehicleKey);
-    const vehicle = vehicles.find((item, index) =>
-      String(item.id ?? index) === String(id)
-    );
-    return getName(vehicle) || "Veículo não encontrado";
+  function refreshFormOptions() {
+    fillSelect(vehicleSelect, getList(vehicleKey), "Selecione um veículo");
+    fillSelect(driverSelect, getList(driverKey), "Selecione um motorista");
   }
 
-  function getDriverName(id) {
-    const drivers = getList(driverKey);
-    const driver = drivers.find((item, index) =>
-      String(item.id ?? index) === String(id)
-    );
+  function getVehicleName(index) {
+    const vehicle = getList(vehicleKey)[Number(index)];
+    if (!vehicle) return "Veículo não encontrado";
+
+    return [vehicle.name, vehicle.plate].filter(Boolean).join(" — ") || "Veículo";
+  }
+
+  function getDriverName(index) {
+    const driver = getList(driverKey)[Number(index)];
     return getName(driver) || "Motorista não encontrado";
   }
 
@@ -116,6 +134,10 @@ if (!session) {
         ? new Date(`${record.date}T00:00:00`).toLocaleDateString("pt-BR")
         : "";
 
+      const value = Number(record.value) || 0;
+      const liters = Number(record.liters) || 0;
+      const odometer = Number(record.odometer) || 0;
+
       return `
         <article class="vehicle-item">
           <span>
@@ -124,4 +146,96 @@ if (!session) {
               ${escapeHTML(date)} · ${escapeHTML(getDriverName(record.driverId))}
             </span>
             <span class="record-meta">
-              ${Number(record.liters).
+              ${liters.toFixed(2)} L · R$ ${value.toFixed(2)} · ${odometer.toLocaleString("pt-BR")} km
+            </span>
+            ${
+              consumption !== null
+                ? `<span class="fueling-consumption">${consumption.toFixed(2)} km/L</span>`
+                : `<span class="record-meta">Consumo indisponível: falta um abastecimento anterior.</span>`
+            }
+          </span>
+        </article>
+      `;
+    }).join("");
+
+    emptyMessage.hidden = records.length > 0;
+  }
+
+  function closeDialog() {
+    dialog.close();
+    form.reset();
+    formError.textContent = "";
+  }
+
+  openFormButton.addEventListener("click", () => {
+    form.reset();
+    formError.textContent = "";
+    refreshFormOptions();
+    dialog.showModal();
+  });
+
+  closeFormButton.addEventListener("click", closeDialog);
+  cancelFormButton.addEventListener("click", closeDialog);
+
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    formError.textContent = "";
+
+    const vehicleId = vehicleSelect.value;
+    const driverId = driverSelect.value;
+    const date = document.querySelector("#date").value;
+    const liters = Number(document.querySelector("#liters").value);
+    const value = Number(document.querySelector("#value").value);
+    const odometer = Number(document.querySelector("#odometer").value);
+
+    if (vehicleId === "" || driverId === "") {
+      formError.textContent = "Selecione um veículo e um motorista.";
+      return;
+    }
+
+    if (!date || liters <= 0 || value < 0 || odometer < 0) {
+      formError.textContent = "Confira os dados informados.";
+      return;
+    }
+
+    const records = getList(fuelingKey);
+
+    const previous = records
+      .filter(item =>
+        String(item.vehicleId) === String(vehicleId) &&
+        Number(item.odometer) > 0
+      )
+      .sort((a, b) => Number(b.odometer) - Number(a.odometer))[0];
+
+    if (previous && odometer <= Number(previous.odometer)) {
+      formError.textContent =
+        `A quilometragem deve ser maior que o último registro (${Number(previous.odometer).toLocaleString("pt-BR")} km).`;
+      return;
+    }
+
+    records.push({
+      vehicleId,
+      driverId,
+      date,
+      liters,
+      value,
+      odometer
+    });
+
+    saveList(fuelingKey, records);
+    renderFuelings();
+    closeDialog();
+
+    if (feedback) feedback.textContent = "Abastecimento registrado.";
+  });
+
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      localStorage.removeItem("frotaAG4Session");
+      window.location.href = "index.html";
+    });
+  }
+
+  refreshFormOptions();
+  renderFuelings();
+}
