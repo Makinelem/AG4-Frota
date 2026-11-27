@@ -136,3 +136,37 @@ if (!session) {
     const quantity = Number(document.querySelector("#quantity").value);
     const unit = document.querySelector("#unit").value;
     const minimum = Number(document
+    const minimum = Number(document.querySelector("#minimum").value);
+    const unitCost = Number(document.querySelector("#unitCost").value);
+
+    if (!name) {
+      formError.textContent = "Informe o nome do item.";
+      return;
+    }
+
+    if (
+      !Number.isFinite(quantity) || quantity < 0 ||
+      !Number.isFinite(minimum) || minimum < 0 ||
+      !Number.isFinite(unitCost) || unitCost < 0
+    ) {
+      formError.textContent = "Confira as quantidades e o custo informados.";
+      return;
+    }
+
+    const items = getStock();
+    items.push({ name, quantity, unit, minimum, unitCost });
+    localStorage.setItem(stockKey, JSON.stringify(items));
+
+    renderStock();
+    closeDialog();
+
+    if (feedback) feedback.textContent = "Item cadastrado no estoque.";
+  });
+
+  logoutButton?.addEventListener("click", () => {
+    localStorage.removeItem("frotaAG4Session");
+    window.location.href = "index.html";
+  });
+
+  renderStock();
+}
