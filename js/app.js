@@ -32,6 +32,16 @@ if (!sessionText) {
     `)
     .join("");
 
+  const navScrollKey = "frotaAG4NavScroll";
+
+if (nav) {
+  nav.scrollLeft = Number(sessionStorage.getItem(navScrollKey)) || 0;
+
+  nav.addEventListener("scroll", () => {
+    sessionStorage.setItem(navScrollKey, nav.scrollLeft);
+  });
+}
+
   const userInfo = document.querySelector("#userInfo");
   const welcomeMessage = document.querySelector("#welcomeMessage");
   const accessNote = document.querySelector("#accessNote");
