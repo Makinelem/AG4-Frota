@@ -139,32 +139,31 @@ if (nav) {
       .sort((a, b) => new Date(b.date) - new Date(a.date));
 
     list.innerHTML = records.map(record => {
-      const consumption = calculateConsumption(record, records);
       const date = record.date
         ? new Date(`${record.date}T00:00:00`).toLocaleDateString("pt-BR")
         : "";
 
-      const value = Number(record.value) || 0;
       const liters = Number(record.liters) || 0;
       const odometer = Number(record.odometer) || 0;
+      const consumption = Number(record.consumption);
 
       return `
-        <article class="vehicle-item">
-          <span>
-            <span class="vehicle-name">${escapeHTML(getVehicleName(record.vehicleId))}</span>
-            <span class="record-meta">
-              ${escapeHTML(date)} · ${escapeHTML(getDriverName(record.driverId))}
-            </span>
-            <span class="record-meta">
-              ${liters.toFixed(2)} L · R$ ${value.toFixed(2)} · ${odometer.toLocaleString("pt-BR")} km
-            </span>
-            ${
-              consumption !== null
-                ? `<span class="fueling-consumption">${consumption.toFixed(2)} km/L</span>`
-                : `<span class="record-meta">Consumo indisponível: falta um abastecimento anterior.</span>`
-            }
-          </span>
-        </article>
+        <tr>
+          <td>${escapeHTML(date)}</td>
+          <td>${escapeHTML(getVehicleName(record.vehicleId))}</td>
+          <td>${escapeHTML(getDriverName(record.driverId))}</td>
+          <td>${liters.toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          })} L</td>
+          <td>${odometer.toLocaleString("pt-BR")} km</td>
+          <td>${Number.isFinite(consumption)
+            ? `${consumption.toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              })} km/L`
+            : "—"}</td>
+        </tr>
       `;
     }).join("");
 
@@ -223,13 +222,25 @@ if (nav) {
       return;
     }
 
+    const previous = records
+      .filter(item =>
+        String(item.vehicleId) === String(vehicleId) &&
+        Number(item.odometer) < odometer
+      )
+      .sort((a, b) => Number(b.odometer) - Number(a.odometer))[0];
+
+    const consumption = previous
+      ? (odometer - Number(previous.odometer)) / liters
+      : null;
+
     records.push({
       vehicleId,
       driverId,
       date,
       liters,
       value,
-      odometer
+      odometer,
+      consumption
     });
 
     saveList(fuelingKey, records);
