@@ -53,3 +53,27 @@ select:focus {
     padding: 9px 7px;
   }
 }
+
+
+.action-buttons {
+  white-space: nowrap;
+}
+
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.action-button img {
+  display: block;
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
