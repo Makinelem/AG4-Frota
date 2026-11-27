@@ -32,7 +32,18 @@
     </div>
 
     <p id="feedback" class="feedback" role="status"></p>
-    <section id="driverList" class="vehicle-list" aria-label="Lista de motoristas"></section>
+    <div class="driver-table-wrap">
+  <table class="driver-table">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Alerta</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="driverList"></tbody>
+  </table>
+</div>
     <p id="emptyMessage" class="empty-message" hidden>Nenhum motorista cadastrado.</p>
     <dialog id="driverDetailsDialog" class="dialog">
   <div class="dialog-card">
@@ -98,6 +109,36 @@
       </button>
       <button id="confirmDeleteButton" class="danger-button" type="button">
         Excluir
+      </button>
+    </div>
+  </div>
+</dialog>
+  <dialog id="confirmDeleteDialog" class="dialog">
+  <div class="dialog-card">
+    <h2>Excluir motorista?</h2>
+    <p>Essa ação não pode ser desfeita.</p>
+    <div class="dialog-actions">
+      <button id="cancelDeleteButton" class="secondary-button" type="button">
+        Cancelar
+      </button>
+      <button id="confirmDeleteButton" class="danger-button" type="button">
+        Excluir
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="birthdayDialog" class="dialog">
+  <div class="dialog-card">
+    <div class="dialog-heading">
+      <h2>Aniversário de motorista 🎂</h2>
+      <button id="closeBirthdayButton" class="icon-button"
+              type="button" aria-label="Fechar">×</button>
+    </div>
+    <div id="birthdayList"></div>
+    <div class="dialog-actions">
+      <button id="acknowledgeBirthdayButton" class="primary-button" type="button">
+        Ok
       </button>
     </div>
   </div>
