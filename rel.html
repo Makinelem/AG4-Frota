@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relatórios | Frota AG4</title>
+  <link rel="stylesheet" href="css/veic.css">
+  <link rel="stylesheet" href="css/rel.css">
+  <script src="js/rel.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="app-brand" href="app.html" aria-label="Frota AG4 - Início">
+      <img src="img/logo.png" alt="Frota AG4" class="app-logo">
+    </a>
+    <div class="user-area">
+      <span id="userInfo"></span>
+      <button id="logoutButton" class="logout-button" type="button">Sair</button>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">GESTÃO DA FROTA</p>
+        <h1>Relatórios</h1>
+        <p class="subtitle">Resumo de abastecimentos, revisões, manutenções e despesas.</p>
+      </div>
+    </div>
+
+    <p id="reportMessage" class="report-message" role="status"></p>
+
+    <section class="report-grid" aria-label="Resumo geral">
+      <article class="report-card">
+        <span class="report-label">Abastecimentos</span>
+        <strong id="fuelingCount">0</strong>
+        <span id="fuelingTotal" class="report-detail">Total: R$ 0,00</span>
+      </article>
+
+      <article class="report-card">
+        <span class="report-label">Revisões</span>
+        <strong id="revisionCount">0</strong>
+        <span id="revisionLatest" class="report-detail">Nenhuma revisão registrada</span>
+      </article>
+
+      <article class="report-card">
+        <span class="report-label">Manutenções</span>
+        <strong id="maintenanceCount">0</strong>
+        <span id="maintenanceTotal" class="report-detail">Custo: R$ 0,00</span>
+      </article>
+
+      <article class="report-card">
+        <span class="report-label">Despesas</span>
+        <strong id="expenseCount">0</strong>
+        <span id="expenseTotal" class="report-detail">Total: R$ 0,00</span>
+      </article>
+    </section>
+
+    <section class="report-section">
+      <h2>Últimos abastecimentos</h2>
+      <div id="fuelingList" class="report-list"></div>
+      <p id="fuelingEmpty" class="empty-message" hidden>Nenhum abastecimento registrado.</p>
+    </section>
+
+    <section class="report-section">
+      <h2>Últimas revisões</h2>
+      <div id="revisionList" class="report-list"></div>
+      <p id="revisionEmpty" class="empty-message" hidden>Nenhuma revisão registrada.</p>
+    </section>
+
+    <section class="report-section">
+      <h2>Últimas manutenções</h2>
+      <div id="maintenanceList" class="report-list"></div>
+      <p id="maintenanceEmpty" class="empty-message" hidden>Nenhuma manutenção registrada.</p>
+    </section>
+
+    <section class="report-section">
+      <h2>Últimas despesas</h2>
+      <div id="expenseList" class="report-list"></div>
+      <p id="expenseEmpty" class="empty-message" hidden>Nenhuma despesa registrada.</p>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" id="bottomNav" aria-label="Navegação principal"></nav>
+</body>
+</html>
