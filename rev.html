@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Revisão | Frota AG4</title>
+  <link rel="stylesheet" href="css/veic.css">
+  <link rel="stylesheet" href="css/rev.css">
+  <script src="js/rev.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="app-brand" href="app.html" aria-label="Frota AG4 - Início">
+      <img src="img/logo.png" alt="Frota AG4" class="app-logo">
+    </a>
+    <div class="user-area">
+      <span id="userInfo"></span>
+      <button id="logoutButton" class="logout-button" type="button">Sair</button>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">GESTÃO DA FROTA</p>
+        <h1>Revisão</h1>
+        <p class="subtitle">Registre as revisões e acompanhe os alertas por quilometragem.</p>
+      </div>
+      <button id="openFormButton" class="primary-button" type="button">
+        + Registrar revisão
+      </button>
+    </div>
+
+    <p id="feedback" class="feedback" role="status"></p>
+    <section id="revisionList" class="vehicle-list" aria-label="Lista de revisões"></section>
+    <p id="emptyMessage" class="empty-message" hidden>Nenhuma revisão cadastrada.</p>
+  </main>
+
+  <nav class="bottom-nav" id="bottomNav" aria-label="Navegação principal"></nav>
+
+  <dialog id="revisionDialog" class="dialog">
+    <form id="revisionForm" class="dialog-card">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">FROTA AG4</p>
+          <h2>Registrar revisão</h2>
+        </div>
+        <button id="closeFormButton" class="icon-button" type="button"
+                aria-label="Fechar">×</button>
+      </div>
+
+      <label for="vehiclePlate">Veículo</label>
+      <select id="vehiclePlate" name="vehiclePlate" required></select>
+
+      <label for="date">Data</label>
+      <input id="date" name="date" type="date" required>
+
+      <label for="odometer">Quilometragem na revisão</label>
+      <input id="odometer" name="odometer" type="number" min="0" step="1" required>
+
+      <label for="service">Serviço realizado</label>
+      <textarea id="service" name="service" rows="3" maxlength="500" required></textarea>
+
+      <label for="itemsApplied">Itens do estoque aplicados (opcional)</label>
+      <textarea id="itemsApplied" name="itemsApplied" rows="2" maxlength="500"
+                placeholder="Informe os itens utilizados, se houver"></textarea>
+
+      <p id="formError" class="error-message" role="alert"></p>
+
+      <div class="dialog-actions">
+        <button id="cancelFormButton" class="secondary-button" type="button">
+          Cancelar
+        </button>
+        <button class="primary-button" type="submit">Salvar revisão</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
