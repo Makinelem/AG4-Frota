@@ -145,7 +145,7 @@ if (nav) {
 
       const liters = Number(record.liters) || 0;
       const odometer = Number(record.odometer) || 0;
-      const consumption = Number(record.consumption);
+      const consumption = calculateConsumption(record, records);
 
       return `
         <tr>
