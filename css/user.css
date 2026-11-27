@@ -1,0 +1,78 @@
+.user-list {
+  display: grid;
+  gap: 12px;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e1e6ed;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.user-card strong,
+.user-card span {
+  display: block;
+}
+
+.user-card strong {
+  margin-bottom: 5px;
+}
+
+.user-meta {
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.user-role {
+  display: inline-block !important;
+  margin-top: 7px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  color: #176b3a;
+  background: #dcfce7;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.delete-user-button {
+  padding: 8px 12px;
+  border: 1px solid #efcaca;
+  border-radius: 8px;
+  color: #a32118;
+  background: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.delete-user-button:hover {
+  background: #fff1f0;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d6dce5;
+  border-radius: 9px;
+  background: #fff;
+  font: inherit;
+}
+
+input:focus,
+select:focus {
+  outline: 3px solid #147d762c;
+  border-color: #147d76;
+}
+
+@media (max-width: 520px) {
+  .user-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
