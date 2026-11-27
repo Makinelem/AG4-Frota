@@ -222,13 +222,6 @@ if (nav) {
       return;
     }
 
-    const previous = records
-      .filter(item =>
-        String(item.vehicleId) === String(vehicleId) &&
-        Number(item.odometer) < odometer
-      )
-      .sort((a, b) => Number(b.odometer) - Number(a.odometer))[0];
-
     const consumption = previous
       ? (odometer - Number(previous.odometer)) / liters
       : null;
