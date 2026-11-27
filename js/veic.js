@@ -18,7 +18,12 @@ if (!session) {
   const formError = document.querySelector("#formError");
   const vehicleDetailsDialog = document.querySelector("#vehicleDetailsDialog");
   const closeDetailsButton = document.querySelector("#closeDetailsButton");
+  const confirmDeleteDialog = document.querySelector("#confirmDeleteDialog");
+  const cancelDeleteButton = document.querySelector("#cancelDeleteButton");
+  const confirmDeleteButton = document.querySelector("#confirmDeleteButton");
+
   const storageKey = "frotaAG4Vehicles";
+  let editingIndex = null;
 
   if (userInfo) userInfo.textContent = session.name || "";
 
@@ -57,73 +62,165 @@ if (!session) {
     nav.addEventListener("scroll", () => {
       sessionStorage.setItem(navScrollKey, nav.scrollLeft);
     });
-
-    nav.addEventListener("click", () => {
-      sessionStorage.setItem(navScrollKey, nav.scrollLeft);
-    });
   }
 
   function getVehicles() {
-    return JSON.parse(localStorage.getItem(storageKey) || "[]");
+    try {
+      const vehicles = JSON.parse(localStorage.getItem(storageKey) || "[]");
+      return Array.isArray(vehicles) ? vehicles : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[character]);
   }
 
   function renderVehicles() {
     const vehicles = getVehicles();
 
     vehicleList.innerHTML = vehicles.map((vehicle, index) => `
-      <button class="vehicle-item" type="button" data-index="${index}">
-        <span>
-          <span class="vehicle-name">${vehicle.name}</span><br>
-          <span class="vehicle-plate">${vehicle.plate}</span>
-        </span>
-      </button>
+      <article class="vehicle-item">
+        <button class="vehicle-info" type="button" data-index="${index}">
+          <span>
+            <span class="vehicle-name">${escapeHTML(vehicle.name)}</span><br>
+            <span class="vehicle-plate">${escapeHTML(vehicle.plate)}</span>
+          </span>
+        </button>
+
+        <div class="action-buttons">
+          <button type="button" class="action-button edit-vehicle"
+                  data-index="${index}" aria-label="Editar veículo">
+            <img src="img/lap.svg" alt="">
+          </button>
+          <button type="button" class="action-button delete-vehicle"
+                  data-index="${index}" aria-label="Excluir veículo">
+            <img src="img/lix.svg" alt="">
+          </button>
+        </div>
+      </article>
     `).join("");
 
     emptyMessage.hidden = vehicles.length > 0;
   }
 
-  openFormButton.addEventListener("click", () => {
+  function openVehicleForm(vehicle = null, index = null) {
     vehicleForm.reset();
     formError.textContent = "";
-    vehicleDialog.showModal();
-  });
+    editingIndex = index;
 
-  function closeDialog() {
+    document.querySelector("#formTitle").textContent =
+      vehicle ? "Editar veículo" : "Cadastrar veículo";
+
+    vehicleForm.querySelector('[type="submit"]').textContent =
+      vehicle ? "Salvar alterações" : "Salvar veículo";
+
+    if (vehicle) {
+      document.querySelector("#name").value = vehicle.name || "";
+      document.querySelector("#plate").value = vehicle.plate || "";
+      document.querySelector("#model").value = vehicle.model || "";
+      document.querySelector("#year").value = vehicle.year || "";
+      document.querySelector("#color").value = vehicle.color || "";
+    }
+
+    vehicleDialog.showModal();
+  }
+
+  function closeFormDialog() {
     vehicleDialog.close();
     vehicleForm.reset();
     formError.textContent = "";
+    editingIndex = null;
+    document.querySelector("#formTitle").textContent = "Cadastrar veículo";
+    vehicleForm.querySelector('[type="submit"]').textContent = "Salvar veículo";
   }
 
-  closeFormButton.addEventListener("click", closeDialog);
-  cancelFormButton.addEventListener("click", closeDialog);
+  openFormButton.addEventListener("click", () => openVehicleForm());
+  closeFormButton.addEventListener("click", closeFormDialog);
+  cancelFormButton.addEventListener("click", closeFormDialog);
 
   vehicleList.addEventListener("click", event => {
-    const button = event.target.closest(".vehicle-item");
-    if (!button) return;
+    const detailsButton = event.target.closest(".vehicle-info");
+    const editButton = event.target.closest(".edit-vehicle");
+    const deleteButton = event.target.closest(".delete-vehicle");
 
-    const vehicle = getVehicles()[Number(button.dataset.index)];
-    if (!vehicle) return;
+    if (detailsButton) {
+      const vehicle = getVehicles()[Number(detailsButton.dataset.index)];
+      if (!vehicle) return;
 
-    document.querySelector("#detailName").textContent = vehicle.name;
-    document.querySelector("#detailPlate").textContent = vehicle.plate;
-    document.querySelector("#detailModel").textContent = vehicle.model;
-    document.querySelector("#detailYear").textContent = vehicle.year;
-    document.querySelector("#detailColor").textContent = vehicle.color;
+      document.querySelector("#detailName").textContent = vehicle.name || "";
+      document.querySelector("#detailPlate").textContent = vehicle.plate || "";
+      document.querySelector("#detailModel").textContent = vehicle.model || "";
+      document.querySelector("#detailYear").textContent = vehicle.year || "";
+      document.querySelector("#detailColor").textContent = vehicle.color || "";
 
-    vehicleDetailsDialog.showModal();
+      vehicleDetailsDialog.showModal();
+    }
+
+    if (editButton) {
+      const index = Number(editButton.dataset.index);
+      const vehicle = getVehicles()[index];
+      if (vehicle) openVehicleForm(vehicle, index);
+    }
+
+    if (deleteButton) {
+      confirmDeleteDialog.dataset.deleteIndex = deleteButton.dataset.index;
+      confirmDeleteDialog.showModal();
+    }
   });
 
   closeDetailsButton.addEventListener("click", () => {
     vehicleDetailsDialog.close();
   });
 
-  logoutButton.addEventListener("click", () => {
-    localStorage.removeItem("frotaAG4Session");
-    window.location.href = "index.html";
+  cancelDeleteButton.addEventListener("click", () => {
+    confirmDeleteDialog.close();
   });
+
+  confirmDeleteButton.addEventListener("click", () => {
+    const index = Number(confirmDeleteDialog.dataset.deleteIndex);
+    const vehicles = getVehicles();
+
+    if (vehicles[index]) {
+      vehicles.splice(index, 1);
+      localStorage.setItem(storageKey, JSON.stringify(vehicles));
+      renderVehicles();
+
+      const fuelings = JSON.parse(
+        localStorage.getItem("frotaAG4Fuelings") || "[]"
+      );
+      const vehicleInUse = fuelings.some(
+        fueling => String(fueling.vehicleId) === String(index)
+      );
+
+      if (vehicleInUse) {
+        document.querySelector("#feedback").textContent =
+          "Veículo excluído. Confira os abastecimentos associados a ele.";
+      } else {
+        document.querySelector("#feedback").textContent = "Veículo excluído.";
+      }
+    }
+
+    confirmDeleteDialog.close();
+  });
+
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      localStorage.removeItem("frotaAG4Session");
+      window.location.href = "index.html";
+    });
+  }
 
   vehicleForm.addEventListener("submit", event => {
     event.preventDefault();
+    formError.textContent = "";
 
     const vehicle = {
       name: document.querySelector("#name").value.trim(),
@@ -135,16 +232,29 @@ if (!session) {
 
     const vehicles = getVehicles();
 
-    if (vehicles.some(item => item.plate === vehicle.plate)) {
+    const duplicatePlate = vehicles.some((item, index) =>
+      index !== editingIndex && item.plate === vehicle.plate
+    );
+
+    if (duplicatePlate) {
       formError.textContent = "Já existe um veículo cadastrado com essa placa.";
       return;
     }
 
-    vehicles.push(vehicle);
-    localStorage.setItem(storageKey, JSON.stringify(vehicles));
+     const wasEditing = editingIndex !== null;
 
+    if (wasEditing) {
+      vehicles[editingIndex] = vehicle;
+    } else {
+      vehicles.push(vehicle);
+    }
+
+    localStorage.setItem(storageKey, JSON.stringify(vehicles));
     renderVehicles();
-    closeDialog();
+    closeFormDialog();
+
+    document.querySelector("#feedback").textContent =
+      wasEditing ? "Veículo atualizado." : "Veículo cadastrado.";
   });
 
   renderVehicles();
