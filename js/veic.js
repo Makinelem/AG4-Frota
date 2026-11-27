@@ -37,25 +37,31 @@ if (!session) {
 
   const paginaAtual = location.pathname.split("/").pop();
 
-  nav.innerHTML = tabs
-    .filter(tab => tab.roles.includes(session.role))
-    .map(tab => `
-      <a class="nav-link ${tab.href === paginaAtual ? "active" : ""}" href="${tab.href}">
-        <img src="${tab.icon}" alt="">
-        <span>${tab.label}</span>
-      </a>
-    `)
-    .join("");
+  if (nav) {
+    nav.innerHTML = tabs
+      .filter(tab => tab.roles.includes(session.role))
+      .map(tab => `
+        <a class="nav-link ${tab.href === paginaAtual ? "active" : ""}" href="${tab.href}">
+          <img src="${tab.icon}" alt="">
+          <span>${tab.label}</span>
+        </a>
+      `)
+      .join("");
 
-const navScrollKey = "frotaAG4NavScroll";
+    const navScrollKey = "frotaAG4NavScroll";
 
-if (nav) {
-  nav.scrollLeft = Number(sessionStorage.getItem(navScrollKey)) || 0;
+    requestAnimationFrame(() => {
+      nav.scrollLeft = Number(sessionStorage.getItem(navScrollKey)) || 0;
+    });
 
-  nav.addEventListener("scroll", () => {
-    sessionStorage.setItem(navScrollKey, nav.scrollLeft);
-  });
-}
+    nav.addEventListener("scroll", () => {
+      sessionStorage.setItem(navScrollKey, nav.scrollLeft);
+    });
+
+    nav.addEventListener("click", () => {
+      sessionStorage.setItem(navScrollKey, nav.scrollLeft);
+    });
+  }
 
   function getVehicles() {
     return JSON.parse(localStorage.getItem(storageKey) || "[]");
