@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Abastecimentos | Frota AG4</title>
+  <link rel="stylesheet" href="css/veic.css">
+  <link rel="stylesheet" href="css/abast.css">
+  <script src="js/abast.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="app-brand" href="app.html" aria-label="Frota AG4 - Início">
+      <img src="img/logo.png" alt="Frota AG4" class="app-logo">
+    </a>
+    <div class="user-area">
+      <span id="userInfo"></span>
+      <button id="logoutButton" class="logout-button" type="button">Sair</button>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">GESTÃO DA FROTA</p>
+        <h1>Abastecimentos</h1>
+        <p class="subtitle">Registre e consulte os abastecimentos da frota.</p>
+      </div>
+      <button id="openFormButton" class="primary-button" type="button">
+        + Registrar abastecimento
+      </button>
+    </div>
+
+    <p id="feedback" class="feedback" role="status"></p>
+    <section id="fuelingList" class="vehicle-list" aria-label="Lista de abastecimentos"></section>
+    <p id="emptyMessage" class="empty-message" hidden>Nenhum abastecimento cadastrado.</p>
+  </main>
+
+  <nav class="bottom-nav" id="bottomNav" aria-label="Navegação principal"></nav>
+
+  <dialog id="fuelingDialog" class="dialog">
+    <form id="fuelingForm" class="dialog-card">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">FROTA AG4</p>
+          <h2>Registrar abastecimento</h2>
+        </div>
+        <button id="closeFormButton" class="icon-button" type="button"
+                aria-label="Fechar">×</button>
+      </div>
+
+      <label for="vehicleId">Veículo</label>
+      <select id="vehicleId" name="vehicleId" required></select>
+
+      <label for="driverId">Motorista</label>
+      <select id="driverId" name="driverId" required></select>
+
+      <label for="date">Data</label>
+      <input id="date" name="date" type="date" required>
+
+      <div class="form-row">
+        <div>
+          <label for="liters">Litros</label>
+          <input id="liters" name="liters" type="number" min="0.01" step="0.01" required>
+        </div>
+        <div>
+          <label for="value">Valor (R$)</label>
+          <input id="value" name="value" type="number" min="0" step="0.01" required>
+        </div>
+      </div>
+
+      <label for="odometer">Quilometragem</label>
+      <input id="odometer" name="odometer" type="number" min="0" step="1" required>
+
+      <p id="formError" class="error-message" role="alert"></p>
+
+      <div class="dialog-actions">
+        <button id="cancelFormButton" class="secondary-button" type="button">
+          Cancelar
+        </button>
+        <button class="primary-button" type="submit">Salvar abastecimento</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
