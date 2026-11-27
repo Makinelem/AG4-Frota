@@ -134,9 +134,20 @@ if (nav) {
     return distance > 0 && liters > 0 ? distance / liters : null;
   }
 
+  function recalculateAllConsumptions() {
+    const records = getList(fuelingKey);
+
+    records.forEach(record => {
+      record.consumption = calculateConsumption(record, records);
+    });
+
+    saveList(fuelingKey, records);
+  }
+
   function renderFuelings() {
     const records = getList(fuelingKey)
-      .sort((a, b) => new Date(b.date) - new Date(a.date));
+  .map((record, index) => ({ ...record, originalIndex: index }))
+  .sort((a, b) => new Date(b.date) - new Date(a.date));
 
     list.innerHTML = records.map(record => {
       const date = record.date
@@ -145,7 +156,8 @@ if (nav) {
 
       const liters = Number(record.liters) || 0;
       const odometer = Number(record.odometer) || 0;
-      const consumption = calculateConsumption(record, records);
+      const consumption =
+  record.consumption == null ? null : Number(record.consumption);
 
       return `
         <tr>
@@ -163,6 +175,16 @@ if (nav) {
                 maximumFractionDigits: 2
               })} km/L`
             : "—"}</td>
+            <td class="action-buttons">
+  <button type="button" class="action-button edit-fueling"
+          data-index="${record.originalIndex}" aria-label="Editar registro">
+    <img src="img/lap.svg" alt="">
+  </button>
+  <button type="button" class="action-button delete-fueling"
+          data-index="${record.originalIndex}" aria-label="Excluir registro">
+    <img src="img/lix.svg" alt="">
+  </button>
+</td>
         </tr>
       `;
     }).join("");
@@ -237,6 +259,7 @@ if (nav) {
     });
 
     saveList(fuelingKey, records);
+    recalculateAllConsumptions();
     renderFuelings();
     closeDialog();
 
@@ -250,6 +273,7 @@ if (nav) {
     });
   }
 
+  recalculateAllConsumptions();
   refreshFormOptions();
   renderFuelings();
 }
