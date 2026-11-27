@@ -19,6 +19,11 @@ if (!session) {
   const feedback = document.querySelector("#feedback");
   const vehicleSelect = document.querySelector("#vehicleId");
   const driverSelect = document.querySelector("#driverId");
+
+  const confirmDeleteDialog = document.querySelector("#confirmDeleteDialog");
+  const cancelDeleteButton = document.querySelector("#cancelDeleteButton");
+  const confirmDeleteButton = document.querySelector("#confirmDeleteButton");
+
   let editingIndex = null;
 
   const fuelingKey = "frotaAG4Fuelings";
@@ -56,13 +61,13 @@ if (!session) {
 
   const navScrollKey = "frotaAG4NavScroll";
 
-if (nav) {
-  nav.scrollLeft = Number(sessionStorage.getItem(navScrollKey)) || 0;
+  if (nav) {
+    nav.scrollLeft = Number(sessionStorage.getItem(navScrollKey)) || 0;
 
-  nav.addEventListener("scroll", () => {
-    sessionStorage.setItem(navScrollKey, nav.scrollLeft);
-  });
-}
+    nav.addEventListener("scroll", () => {
+      sessionStorage.setItem(navScrollKey, nav.scrollLeft);
+    });
+  }
 
   function getList(key) {
     try {
@@ -147,8 +152,8 @@ if (nav) {
 
   function renderFuelings() {
     const records = getList(fuelingKey)
-  .map((record, index) => ({ ...record, originalIndex: index }))
-  .sort((a, b) => new Date(b.date) - new Date(a.date));
+      .map((record, index) => ({ ...record, originalIndex: index }))
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
 
     list.innerHTML = records.map(record => {
       const date = record.date
@@ -158,7 +163,7 @@ if (nav) {
       const liters = Number(record.liters) || 0;
       const odometer = Number(record.odometer) || 0;
       const consumption =
-  record.consumption == null ? null : Number(record.consumption);
+        record.consumption == null ? null : Number(record.consumption);
 
       return `
         <tr>
@@ -176,16 +181,16 @@ if (nav) {
                 maximumFractionDigits: 2
               })} km/L`
             : "—"}</td>
-            <td class="action-buttons">
-  <button type="button" class="action-button edit-fueling"
-          data-index="${record.originalIndex}" aria-label="Editar registro">
-    <img src="img/lap.svg" alt="">
-  </button>
-  <button type="button" class="action-button delete-fueling"
-          data-index="${record.originalIndex}" aria-label="Excluir registro">
-    <img src="img/lix.svg" alt="">
-  </button>
-</td>
+          <td class="action-buttons">
+            <button type="button" class="action-button edit-fueling"
+                    data-index="${record.originalIndex}" aria-label="Editar registro">
+              <img src="img/lap.svg" alt="">
+            </button>
+            <button type="button" class="action-button delete-fueling"
+                    data-index="${record.originalIndex}" aria-label="Excluir registro">
+              <img src="img/lix.svg" alt="">
+            </button>
+          </td>
         </tr>
       `;
     }).join("");
@@ -217,13 +222,20 @@ if (nav) {
     }
 
     if (deleteButton) {
-      const index = Number(deleteButton.dataset.index);
+      confirmDeleteDialog.dataset.deleteIndex = deleteButton.dataset.index;
+      confirmDeleteDialog.showModal();
+    }
+  });
 
-      if (!confirm("Tem certeza que deseja excluir este abastecimento?")) {
-        return;
-      }
+  cancelDeleteButton.addEventListener("click", () => {
+    confirmDeleteDialog.close();
+  });
 
-      const records = getList(fuelingKey);
+  confirmDeleteButton.addEventListener("click", () => {
+    const index = Number(confirmDeleteDialog.dataset.deleteIndex);
+    const records = getList(fuelingKey);
+
+    if (records[index]) {
       records.splice(index, 1);
       saveList(fuelingKey, records);
       recalculateAllConsumptions();
@@ -231,6 +243,8 @@ if (nav) {
 
       if (feedback) feedback.textContent = "Abastecimento excluído.";
     }
+
+    confirmDeleteDialog.close();
   });
 
   function closeDialog() {
