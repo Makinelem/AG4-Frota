@@ -46,7 +46,6 @@ if (!session) {
       </a>
     `)
     .join("");
-}
 
 const navScrollKey = "frotaAG4NavScroll";
 
