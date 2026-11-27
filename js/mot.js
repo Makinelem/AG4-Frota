@@ -116,37 +116,31 @@ if (!session) {
     const days = daysUntil(driver.licenseExpiry);
     let alert = "";
 
-    if (days !== null && days < 0) {
+    if (days !== null && days >= 0 && days < 90) {
+      alert = `<span class="license-alert">${days} dias restantes</span>`;
+    } else if (days !== null && days < 0) {
       alert = `<span class="license-alert expired">CNH vencida</span>`;
-    } else if (days !== null && days < 90) {
-      const message = days === 0
-        ? "CNH vence hoje"
-        : `CNH vence em ${days} dia${days === 1 ? "" : "s"}`;
-
-      alert = `<span class="license-alert">${message}</span>`;
     }
 
     return `
-      <tr>
-        <td>
-          <button class="driver-info" type="button" data-index="${index}">
-            ${escapeHTML(driver.name)}
+      <article class="vehicle-item driver-card">
+        <button class="driver-info" type="button" data-index="${index}">
+          ${escapeHTML(driver.name)}
+        </button>
+
+        <div class="driver-alert-space">${alert}</div>
+
+        <div class="action-buttons">
+          <button type="button" class="action-button edit-driver"
+                  data-index="${index}" aria-label="Editar motorista">
+            <img src="img/lap.svg" alt="">
           </button>
-        </td>
-        <td>${alert}</td>
-        <td>
-          <div class="action-buttons">
-            <button type="button" class="action-button edit-driver"
-                    data-index="${index}" aria-label="Editar motorista">
-              <img src="img/lap.svg" alt="">
-            </button>
-            <button type="button" class="action-button delete-driver"
-                    data-index="${index}" aria-label="Excluir motorista">
-              <img src="img/lix.svg" alt="">
-            </button>
-          </div>
-        </td>
-      </tr>
+          <button type="button" class="action-button delete-driver"
+                  data-index="${index}" aria-label="Excluir motorista">
+            <img src="img/lix.svg" alt="">
+          </button>
+        </div>
+      </article>
     `;
   }).join("");
 
