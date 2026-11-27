@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Usuários | Frota AG4</title>
+  <link rel="stylesheet" href="css/veic.css">
+  <link rel="stylesheet" href="css/user.css">
+  <script src="js/user.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="app-brand" href="app.html" aria-label="Frota AG4 - Início">
+      <img src="img/logo.png" alt="Frota AG4" class="app-logo">
+    </a>
+    <div class="user-area">
+      <span id="userInfo"></span>
+      <button id="logoutButton" class="logout-button" type="button">Sair</button>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">ADMINISTRAÇÃO</p>
+        <h1>Usuários</h1>
+        <p class="subtitle">Cadastre e gerencie os acessos à aplicação.</p>
+      </div>
+      <button id="openFormButton" class="primary-button" type="button">
+        + Cadastrar usuário
+      </button>
+    </div>
+
+    <p id="feedback" class="feedback" role="status"></p>
+
+    <section id="userList" class="user-list" aria-label="Lista de usuários"></section>
+    <p id="emptyMessage" class="empty-message" hidden>Nenhum usuário cadastrado.</p>
+  </main>
+
+  <nav class="bottom-nav" id="bottomNav" aria-label="Navegação principal"></nav>
+
+  <dialog id="userDialog" class="dialog">
+    <form id="userForm" class="dialog-card">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">FROTA AG4</p>
+          <h2>Cadastrar usuário</h2>
+        </div>
+        <button id="closeFormButton" class="icon-button" type="button"
+                aria-label="Fechar">×</button>
+      </div>
+
+      <label for="name">Nome</label>
+      <input id="name" name="name" type="text" maxlength="100" required>
+
+      <label for="email">E-mail</label>
+      <input id="email" name="email" type="email" maxlength="150" required>
+
+      <label for="password">Senha</label>
+      <input id="password" name="password" type="password" minlength="6" required
+             autocomplete="new-password">
+
+      <label for="role">Permissão</label>
+      <select id="role" name="role" required>
+        <option value="usuario">Usuário</option>
+        <option value="gerente">Gerente</option>
+        <option value="administrador">Administrador</option>
+      </select>
+
+      <p id="formError" class="error-message" role="alert"></p>
+
+      <div class="dialog-actions">
+        <button id="cancelFormButton" class="secondary-button" type="button">
+          Cancelar
+        </button>
+        <button class="primary-button" type="submit">Salvar usuário</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
