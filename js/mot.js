@@ -16,7 +16,14 @@ if (!session) {
   const driverList = document.querySelector("#driverList");
   const emptyMessage = document.querySelector("#emptyMessage");
   const formError = document.querySelector("#formError");
+  const driverDetailsDialog = document.querySelector("#driverDetailsDialog");
+  const closeDetailsButton = document.querySelector("#closeDetailsButton");
+  const confirmDeleteDialog = document.querySelector("#confirmDeleteDialog");
+  const cancelDeleteButton = document.querySelector("#cancelDeleteButton");
+  const confirmDeleteButton = document.querySelector("#confirmDeleteButton");
+
   const storageKey = "frotaAG4Drivers";
+  let editingIndex = null;
 
   if (userInfo) userInfo.textContent = session.name || "";
 
@@ -35,31 +42,50 @@ if (!session) {
 
   const currentPage = location.pathname.split("/").pop();
 
-  nav.innerHTML = tabs
-    .filter(tab => tab.roles.includes(session.role))
-    .map(tab => `
-      <a class="nav-link ${tab.href === currentPage ? "active" : ""}" href="${tab.href}">
-        <img src="${tab.icon}" alt="">
-        <span>${tab.label}</span>
-      </a>
-    `)
-    .join("");
+  if (nav) {
+    nav.innerHTML = tabs
+      .filter(tab => tab.roles.includes(session.role))
+      .map(tab => `
+        <a class="nav-link ${tab.href === currentPage ? "active" : ""}" href="${tab.href}">
+          <img src="${tab.icon}" alt="">
+          <span>${tab.label}</span>
+        </a>
+      `)
+      .join("");
 
-  const navScrollKey = "frotaAG4NavScroll";
+    const navScrollKey = "frotaAG4NavScroll";
 
-if (nav) {
-  nav.scrollLeft = Number(sessionStorage.getItem(navScrollKey)) || 0;
+    requestAnimationFrame(() => {
+      nav.scrollLeft = Number(sessionStorage.getItem(navScrollKey)) || 0;
+    });
 
-  nav.addEventListener("scroll", () => {
-    sessionStorage.setItem(navScrollKey, nav.scrollLeft);
-  });
-}
+    nav.addEventListener("scroll", () => {
+      sessionStorage.setItem(navScrollKey, nav.scrollLeft);
+    });
+  }
 
   function getDrivers() {
-    return JSON.parse(localStorage.getItem(storageKey) || "[]");
+    try {
+      const drivers = JSON.parse(localStorage.getItem(storageKey) || "[]");
+      return Array.isArray(drivers) ? drivers : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[character]);
   }
 
   function daysUntil(dateString) {
+    if (!dateString) return null;
+
     const [year, month, day] = dateString.split("-").map(Number);
     const expiry = Date.UTC(year, month - 1, day);
     const today = new Date();
@@ -73,81 +99,148 @@ if (nav) {
   }
 
   function formatDate(dateString) {
+    if (!dateString) return "—";
     const [year, month, day] = dateString.split("-");
     return `${day}/${month}/${year}`;
   }
 
   function renderDrivers() {
-  const drivers = getDrivers();
+    const drivers = getDrivers();
 
-  driverList.innerHTML = drivers.map((driver, index) => {
-    const days = daysUntil(driver.licenseExpiry);
-    let alert = "";
+    driverList.innerHTML = drivers.map((driver, index) => {
+      const days = daysUntil(driver.licenseExpiry);
+      let alert = "";
 
-    if (days < 0) {
-      alert = `<span class="license-alert expired">CNH vencida</span>`;
-    } else if (days < 90) {
-      const message = days === 0
-        ? "CNH vence hoje"
-        : `CNH vence em ${days} dia${days === 1 ? "" : "s"}`;
+      if (days !== null && days < 0) {
+        alert = `<span class="license-alert expired">CNH vencida</span>`;
+      } else if (days !== null && days < 90) {
+        const message = days === 0
+          ? "CNH vence hoje"
+          : `CNH vence em ${days} dia${days === 1 ? "" : "s"}`;
 
-      alert = `<span class="license-alert">${message}</span>`;
+        alert = `<span class="license-alert">${message}</span>`;
+      }
+
+      return `
+        <article class="vehicle-item driver-card">
+          <button class="driver-info" type="button" data-index="${index}">
+            <span>
+              <span class="vehicle-name">${escapeHTML(driver.name)}</span><br>
+              <span class="driver-birth">${escapeHTML(formatDate(driver.birthDate))}</span>
+              ${alert}
+            </span>
+          </button>
+
+          <div class="action-buttons">
+            <button type="button" class="action-button edit-driver"
+                    data-index="${index}" aria-label="Editar motorista">
+              <img src="img/lap.svg" alt="">
+            </button>
+            <button type="button" class="action-button delete-driver"
+                    data-index="${index}" aria-label="Excluir motorista">
+              <img src="img/lix.svg" alt="">
+            </button>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    emptyMessage.hidden = drivers.length > 0;
+  }
+
+  function openDriverForm(driver = null, index = null) {
+    driverForm.reset();
+    formError.textContent = "";
+    editingIndex = index;
+
+    driverForm.querySelector("h2").textContent =
+      driver ? "Editar motorista" : "Cadastrar motorista";
+
+    driverForm.querySelector('[type="submit"]').textContent =
+      driver ? "Salvar alterações" : "Salvar motorista";
+
+    if (driver) {
+      document.querySelector("#name").value = driver.name || "";
+      document.querySelector("#birthDate").value = driver.birthDate || "";
+      document.querySelector("#phone").value = driver.phone || "";
+      document.querySelector("#licenseExpiry").value =
+        driver.licenseExpiry || "";
     }
 
-    return `
-      <button class="vehicle-item driver-item" type="button" data-index="${index}">
-        <span>
-          <span class="vehicle-name">${driver.name}</span><br>
-          <span class="driver-birth">${formatDate(driver.birthDate)}</span>
-          ${alert}
-        </span>
-      </button>
-    `;
-  }).join("");
+    driverDialog.showModal();
+  }
 
-  emptyMessage.hidden = drivers.length > 0;
-}
-
-  const driverDetailsDialog = document.querySelector("#driverDetailsDialog");
-const closeDetailsButton = document.querySelector("#closeDetailsButton");
-
-driverList.addEventListener("click", event => {
-  const button = event.target.closest(".driver-item");
-  if (!button) return;
-
-  const driver = getDrivers()[Number(button.dataset.index)];
-  if (!driver) return;
-
-  document.querySelector("#detailName").textContent = driver.name;
-  document.querySelector("#detailBirthDate").textContent = formatDate(driver.birthDate);
-  document.querySelector("#detailPhone").textContent = driver.phone;
-  document.querySelector("#detailLicenseExpiry").textContent =
-    formatDate(driver.licenseExpiry);
-
-  driverDetailsDialog.showModal();
-});
-
-closeDetailsButton.addEventListener("click", () => {
-  driverDetailsDialog.close();
-});
-
-  function closeDialog() {
+  function closeDriverForm() {
     driverDialog.close();
     driverForm.reset();
     formError.textContent = "";
+    editingIndex = null;
+    driverForm.querySelector("h2").textContent = "Cadastrar motorista";
+    driverForm.querySelector('[type="submit"]').textContent =
+      "Salvar motorista";
   }
 
-  openFormButton.addEventListener("click", () => {
-    driverForm.reset();
-    formError.textContent = "";
-    driverDialog.showModal();
+  openFormButton.addEventListener("click", () => openDriverForm());
+  closeFormButton.addEventListener("click", closeDriverForm);
+  cancelFormButton.addEventListener("click", closeDriverForm);
+
+  driverList.addEventListener("click", event => {
+    const detailsButton = event.target.closest(".driver-info");
+    const editButton = event.target.closest(".edit-driver");
+    const deleteButton = event.target.closest(".delete-driver");
+
+    if (detailsButton) {
+      const driver = getDrivers()[Number(detailsButton.dataset.index)];
+      if (!driver) return;
+
+      document.querySelector("#detailName").textContent = driver.name || "";
+      document.querySelector("#detailBirthDate").textContent =
+        formatDate(driver.birthDate);
+      document.querySelector("#detailPhone").textContent = driver.phone || "";
+      document.querySelector("#detailLicenseExpiry").textContent =
+        formatDate(driver.licenseExpiry);
+
+      driverDetailsDialog.showModal();
+    }
+
+    if (editButton) {
+      const index = Number(editButton.dataset.index);
+      const driver = getDrivers()[index];
+      if (driver) openDriverForm(driver, index);
+    }
+
+    if (deleteButton) {
+      confirmDeleteDialog.dataset.deleteIndex = deleteButton.dataset.index;
+      confirmDeleteDialog.showModal();
+    }
   });
 
-  closeFormButton.addEventListener("click", closeDialog);
-  cancelFormButton.addEventListener("click", closeDialog);
+  closeDetailsButton.addEventListener("click", () => {
+    driverDetailsDialog.close();
+  });
+
+  cancelDeleteButton.addEventListener("click", () => {
+    confirmDeleteDialog.close();
+  });
+
+  confirmDeleteButton.addEventListener("click", () => {
+    const index = Number(confirmDeleteDialog.dataset.deleteIndex);
+    const drivers = getDrivers();
+
+    if (drivers[index]) {
+      drivers.splice(index, 1);
+      localStorage.setItem(storageKey, JSON.stringify(drivers));
+      renderDrivers();
+      document.querySelector("#feedback").textContent =
+        "Motorista excluído.";
+    }
+
+    confirmDeleteDialog.close();
+  });
 
   driverForm.addEventListener("submit", event => {
     event.preventDefault();
+    formError.textContent = "";
 
     const driver = {
       name: document.querySelector("#name").value.trim(),
@@ -157,17 +250,29 @@ closeDetailsButton.addEventListener("click", () => {
     };
 
     const drivers = getDrivers();
-    drivers.push(driver);
+    const wasEditing = editingIndex !== null;
+
+    if (wasEditing) {
+      drivers[editingIndex] = driver;
+    } else {
+      drivers.push(driver);
+    }
+
     localStorage.setItem(storageKey, JSON.stringify(drivers));
-
     renderDrivers();
-    closeDialog();
+    closeDriverForm();
+
+    document.querySelector("#feedback").textContent =
+      wasEditing ? "Motorista atualizado." : "Motorista cadastrado.";
   });
 
-  logoutButton.addEventListener("click", () => {
-    localStorage.removeItem("frotaAG4Session");
-    window.location.href = "index.html";
-  });
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      localStorage.removeItem("frotaAG4Session");
+      window.location.href = "index.html";
+    });
+  }
 
   renderDrivers();
 }
+
