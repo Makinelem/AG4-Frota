@@ -103,3 +103,50 @@
     min-width: 500px;
   }
 }
+
+.driver-card {
+  display: grid;
+  grid-template-columns: minmax(100px, 1fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.driver-info {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.driver-alert-space {
+  min-width: 0;
+  color: #526078;
+  font-size: 14px;
+}
+
+.driver-alert-space .license-alert {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 480px) {
+  .driver-card {
+    grid-template-columns: minmax(70px, 1fr) minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+
+  .driver-alert-space {
+    font-size: 12px;
+  }
+}
