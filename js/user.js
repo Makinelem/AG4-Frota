@@ -50,6 +50,16 @@ if (!session || session.role !== "administrador") {
     `).join("");
   }
 
+  const navScrollKey = "frotaAG4NavScroll";
+
+if (nav) {
+  nav.scrollLeft = Number(sessionStorage.getItem(navScrollKey)) || 0;
+
+  nav.addEventListener("scroll", () => {
+    sessionStorage.setItem(navScrollKey, nav.scrollLeft);
+  });
+}
+
   function getUsers() {
     try {
       const users = JSON.parse(localStorage.getItem(usersKey) || "[]");
