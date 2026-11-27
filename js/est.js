@@ -135,7 +135,6 @@ if (!session) {
     const name = document.querySelector("#itemName").value.trim();
     const quantity = Number(document.querySelector("#quantity").value);
     const unit = document.querySelector("#unit").value;
-    const minimum = Number(document
     const minimum = Number(document.querySelector("#minimum").value);
     const unitCost = Number(document.querySelector("#unitCost").value);
 
