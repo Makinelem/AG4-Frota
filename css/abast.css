@@ -22,3 +22,34 @@ select:focus {
     grid-template-columns: 1fr;
   }
 }
+
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.fueling-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.fueling-table th,
+.fueling-table td {
+  padding: 12px;
+  border-bottom: 1px solid #d6dce5;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.fueling-table th {
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .fueling-table th,
+  .fueling-table td {
+    padding: 9px 7px;
+  }
+}
