@@ -19,6 +19,7 @@ if (!session) {
   const feedback = document.querySelector("#feedback");
   const vehicleSelect = document.querySelector("#vehicleId");
   const driverSelect = document.querySelector("#driverId");
+  let editingIndex = null;
 
   const fuelingKey = "frotaAG4Fuelings";
   const vehicleKey = "frotaAG4Vehicles";
@@ -192,13 +193,59 @@ if (nav) {
     emptyMessage.hidden = records.length > 0;
   }
 
+  list.addEventListener("click", event => {
+    const editButton = event.target.closest(".edit-fueling");
+    const deleteButton = event.target.closest(".delete-fueling");
+
+    if (editButton) {
+      editingIndex = Number(editButton.dataset.index);
+      const record = getList(fuelingKey)[editingIndex];
+      if (!record) return;
+
+      refreshFormOptions();
+      vehicleSelect.value = String(record.vehicleId);
+      driverSelect.value = String(record.driverId);
+      document.querySelector("#date").value = record.date;
+      document.querySelector("#liters").value = record.liters;
+      document.querySelector("#value").value = record.value;
+      document.querySelector("#odometer").value = record.odometer;
+
+      formError.textContent = "";
+      dialog.querySelector("h2").textContent = "Editar abastecimento";
+      form.querySelector('[type="submit"]').textContent = "Salvar alterações";
+      dialog.showModal();
+    }
+
+    if (deleteButton) {
+      const index = Number(deleteButton.dataset.index);
+
+      if (!confirm("Tem certeza que deseja excluir este abastecimento?")) {
+        return;
+      }
+
+      const records = getList(fuelingKey);
+      records.splice(index, 1);
+      saveList(fuelingKey, records);
+      recalculateAllConsumptions();
+      renderFuelings();
+
+      if (feedback) feedback.textContent = "Abastecimento excluído.";
+    }
+  });
+
   function closeDialog() {
     dialog.close();
     form.reset();
     formError.textContent = "";
+    editingIndex = null;
+    dialog.querySelector("h2").textContent = "Registrar abastecimento";
+    form.querySelector('[type="submit"]').textContent = "Salvar abastecimento";
   }
 
   openFormButton.addEventListener("click", () => {
+    editingIndex = null;
+    dialog.querySelector("h2").textContent = "Registrar abastecimento";
+    form.querySelector('[type="submit"]').textContent = "Salvar abastecimento";
     form.reset();
     formError.textContent = "";
     refreshFormOptions();
@@ -231,39 +278,46 @@ if (nav) {
 
     const records = getList(fuelingKey);
 
-    const previous = records
-      .filter(item =>
-        String(item.vehicleId) === String(vehicleId) &&
-        Number(item.odometer) > 0
-      )
-      .sort((a, b) => Number(b.odometer) - Number(a.odometer))[0];
+    const duplicateOdometer = records.some((item, index) =>
+      index !== editingIndex &&
+      String(item.vehicleId) === String(vehicleId) &&
+      Number(item.odometer) === odometer
+    );
 
-    if (previous && odometer <= Number(previous.odometer)) {
+    if (duplicateOdometer) {
       formError.textContent =
-        `A quilometragem deve ser maior que o último registro (${Number(previous.odometer).toLocaleString("pt-BR")} km).`;
+        "Já existe um registro desse veículo com essa quilometragem.";
       return;
     }
 
-    const consumption = previous
-      ? (odometer - Number(previous.odometer)) / liters
-      : null;
-
-    records.push({
+    const updatedRecord = {
+      ...(editingIndex !== null ? records[editingIndex] : {}),
       vehicleId,
       driverId,
       date,
       liters,
       value,
-      odometer,
-      consumption
-    });
+      odometer
+    };
+
+    const wasEditing = editingIndex !== null;
+
+    if (wasEditing) {
+      records[editingIndex] = updatedRecord;
+    } else {
+      records.push(updatedRecord);
+    }
 
     saveList(fuelingKey, records);
     recalculateAllConsumptions();
     renderFuelings();
     closeDialog();
 
-    if (feedback) feedback.textContent = "Abastecimento registrado.";
+    if (feedback) {
+      feedback.textContent = wasEditing
+        ? "Abastecimento atualizado."
+        : "Abastecimento registrado.";
+    }
   });
 
   if (logoutButton) {
