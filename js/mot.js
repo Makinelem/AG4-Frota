@@ -21,6 +21,11 @@ if (!session) {
   const confirmDeleteDialog = document.querySelector("#confirmDeleteDialog");
   const cancelDeleteButton = document.querySelector("#cancelDeleteButton");
   const confirmDeleteButton = document.querySelector("#confirmDeleteButton");
+  const birthdayDialog = document.querySelector("#birthdayDialog");
+  const birthdayList = document.querySelector("#birthdayList");
+  const closeBirthdayButton = document.querySelector("#closeBirthdayButton");
+  const acknowledgeBirthdayButton =
+  document.querySelector("#acknowledgeBirthdayButton");
 
   const storageKey = "frotaAG4Drivers";
   let editingIndex = null;
@@ -105,32 +110,31 @@ if (!session) {
   }
 
   function renderDrivers() {
-    const drivers = getDrivers();
+  const drivers = getDrivers();
 
-    driverList.innerHTML = drivers.map((driver, index) => {
-      const days = daysUntil(driver.licenseExpiry);
-      let alert = "";
+  driverList.innerHTML = drivers.map((driver, index) => {
+    const days = daysUntil(driver.licenseExpiry);
+    let alert = "";
 
-      if (days !== null && days < 0) {
-        alert = `<span class="license-alert expired">CNH vencida</span>`;
-      } else if (days !== null && days < 90) {
-        const message = days === 0
-          ? "CNH vence hoje"
-          : `CNH vence em ${days} dia${days === 1 ? "" : "s"}`;
+    if (days !== null && days < 0) {
+      alert = `<span class="license-alert expired">CNH vencida</span>`;
+    } else if (days !== null && days < 90) {
+      const message = days === 0
+        ? "CNH vence hoje"
+        : `CNH vence em ${days} dia${days === 1 ? "" : "s"}`;
 
-        alert = `<span class="license-alert">${message}</span>`;
-      }
+      alert = `<span class="license-alert">${message}</span>`;
+    }
 
-      return `
-        <article class="vehicle-item driver-card">
+    return `
+      <tr>
+        <td>
           <button class="driver-info" type="button" data-index="${index}">
-            <span>
-              <span class="vehicle-name">${escapeHTML(driver.name)}</span><br>
-              <span class="driver-birth">${escapeHTML(formatDate(driver.birthDate))}</span>
-              ${alert}
-            </span>
+            ${escapeHTML(driver.name)}
           </button>
-
+        </td>
+        <td>${alert}</td>
+        <td>
           <div class="action-buttons">
             <button type="button" class="action-button edit-driver"
                     data-index="${index}" aria-label="Editar motorista">
@@ -141,12 +145,13 @@ if (!session) {
               <img src="img/lix.svg" alt="">
             </button>
           </div>
-        </article>
-      `;
-    }).join("");
+        </td>
+      </tr>
+    `;
+  }).join("");
 
-    emptyMessage.hidden = drivers.length > 0;
-  }
+  emptyMessage.hidden = drivers.length > 0;
+}
 
   function openDriverForm(driver = null, index = null) {
     driverForm.reset();
@@ -272,7 +277,62 @@ if (!session) {
       window.location.href = "index.html";
     });
   }
+  function todayKey() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getBirthdayDrivers() {
+  const today = new Date();
+  const todayMonth = today.getMonth() + 1;
+  const todayDay = today.getDate();
+
+  return getDrivers().filter(driver => {
+    if (!driver.birthDate) return false;
+
+    const [, month, day] = driver.birthDate.split("-").map(Number);
+    return month === todayMonth && day === todayDay;
+  });
+}
+
+function showBirthdayReminder() {
+  const birthdayDrivers = getBirthdayDrivers();
+  if (birthdayDrivers.length === 0) return;
+
+  const key = `frotaAG4BirthdayOk_${todayKey()}`;
+  const acknowledged = JSON.parse(localStorage.getItem(key) || "[]");
+  const pendingDrivers = birthdayDrivers.filter(
+    (driver, index) => !acknowledged.includes(driver.name + index)
+  );
+
+  if (pendingDrivers.length === 0) return;
+
+  birthdayList.innerHTML = pendingDrivers.map(driver =>
+    `<p>Hoje é aniversário de <strong>${escapeHTML(driver.name)}</strong>! 🎉</p>`
+  ).join("");
+
+  birthdayDialog.showModal();
+}
+
+closeBirthdayButton.addEventListener("click", () => {
+  birthdayDialog.close();
+});
+
+acknowledgeBirthdayButton.addEventListener("click", () => {
+  const key = `frotaAG4BirthdayOk_${todayKey()}`;
+  const birthdayDrivers = getBirthdayDrivers();
+  const acknowledged = birthdayDrivers.map(
+    (driver, index) => driver.name + index
+  );
+
+  localStorage.setItem(key, JSON.stringify(acknowledged));
+  birthdayDialog.close();
+});
 
   renderDrivers();
+  showBirthdayReminder();
 }
 
