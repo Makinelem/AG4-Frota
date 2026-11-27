@@ -32,7 +32,21 @@
     </div>
 
     <p id="feedback" class="feedback" role="status"></p>
-    <section id="fuelingList" class="vehicle-list" aria-label="Lista de abastecimentos"></section>
+    <div class="table-wrapper">
+  <table class="fueling-table">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Veículo</th>
+        <th>Motorista</th>
+        <th>Litros</th>
+        <th>km</th>
+        <th>Consumo</th>
+      </tr>
+    </thead>
+    <tbody id="fuelingList"></tbody>
+  </table>
+</div>
     <p id="emptyMessage" class="empty-message" hidden>Nenhum abastecimento cadastrado.</p>
   </main>
 
