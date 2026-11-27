@@ -312,3 +312,48 @@ input:focus {
   max-width: 160px;
   object-fit: contain;
 }
+
+/* Ações de editar e excluir em cada veículo */
+.vehicle-item {
+  cursor: default;
+}
+
+.vehicle-info {
+  flex: 1;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  padding: 7px;
+  place-items: center;
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background: #f4f7fa;
+}
+
+.action-button img {
+  display: block;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
