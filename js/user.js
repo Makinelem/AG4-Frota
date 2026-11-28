@@ -27,16 +27,16 @@ if (!session || session.role !== "administrador") {
   if (userInfo) userInfo.textContent = session.name || "";
 
   const tabs = [
-    { label: "Início", href: "app.html", icon: "img/ini.svg" },
-    { label: "Veículos", href: "veic.html", icon: "img/vei.svg" },
-    { label: "Motoristas", href: "mot.html", icon: "img/mot.svg" },
-    { label: "Abastecimentos", href: "abast.html", icon: "img/aba.svg" },
-    { label: "Revisão", href: "rev.html", icon: "img/rev.svg" },
-    { label: "Manutenção", href: "manut.html", icon: "img/man.svg" },
-    { label: "Estoque", href: "est.html", icon: "img/est.svg" },
-    { label: "Financeiro", href: "finan.html", icon: "img/fin.svg" },
-    { label: "Relatórios", href: "rel.html", icon: "img/rel.svg" },
-    { label: "Usuários", href: "user.html", icon: "img/use.svg" }
+    { label: "Início", href: "app.html", icon: "img/ini.svg", roles: ["usuario", "gerente", "administrador"] },
+    { label: "Veículos", href: "veic.html", icon: "img/vei.svg", roles: ["usuario", "gerente", "administrador"] },
+    { label: "Motoristas", href: "mot.html", icon: "img/mot.svg", roles: ["usuario", "gerente", "administrador"] },
+    { label: "Abastecimentos", href: "abast.html", icon: "img/aba.svg", roles: ["usuario", "gerente", "administrador"] },
+    { label: "Revisão", href: "rev.html", icon: "img/rev.svg", roles: ["gerente", "administrador"] },
+    { label: "Manutenção", href: "manut.html", icon: "img/man.svg", roles: ["gerente", "administrador"] },
+    { label: "Estoque", href: "est.html", icon: "img/est.svg", roles: ["gerente", "administrador"] },
+    { label: "Financeiro", href: "finan.html", icon: "img/fin.svg", roles: ["gerente", "administrador"] },
+    { label: "Relatórios", href: "rel.html", icon: "img/rel.svg", roles: ["gerente", "administrador"] },
+    { label: "Usuários", href: "user.html", icon: "img/use.svg", roles: ["administrador"] }
   ];
 
   const currentPage = location.pathname.split("/").pop() || "user.html";
