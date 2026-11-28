@@ -29,7 +29,7 @@ if (!session) {
     { label: "Início", href: "app.html", icon: "img/ini.svg", roles: ["usuario", "gerente", "administrador"] },
     { label: "Veículos", href: "veic.html", icon: "img/vei.svg", roles: ["usuario", "gerente", "administrador"] },
     { label: "Motoristas", href: "mot.html", icon: "img/mot.svg", roles: ["usuario", "gerente", "administrador"] },
-    { label: "Abastecimentos", href: "abast.html", icon: "img/aba.svg", roles: ["gerente", "administrador"] },
+    { label: "Abastecimentos", href: "abast.html", icon: "img/aba.svg", roles: ["usuario", "gerente", "administrador"] },
     { label: "Revisão", href: "rev.html", icon: "img/rev.svg", roles: ["gerente", "administrador"] },
     { label: "Manutenção", href: "manut.html", icon: "img/man.svg", roles: ["gerente", "administrador"] },
     { label: "Estoque", href: "est.html", icon: "img/est.svg", roles: ["gerente", "administrador"] },
@@ -37,7 +37,6 @@ if (!session) {
     { label: "Relatórios", href: "rel.html", icon: "img/rel.svg", roles: ["gerente", "administrador"] },
     { label: "Usuários", href: "user.html", icon: "img/use.svg", roles: ["administrador"] }
   ];
-
   const currentPage = location.pathname.split("/").pop() || "rev.html";
 
   if (nav) {
